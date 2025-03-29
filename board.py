@@ -36,5 +36,12 @@ class Board:
     def check_diagonals(self):
         if self.board_array[0][0] == self.board_array[1][1] == self.board_array[2][2] != 0:
             return self.board_array[0][0]
-        if self.board_array[2][0] == self.board_array[1][1] == self.board_array[2][0] != 0:
+        if self.board_array[2][0] == self.board_array[1][1] == self.board_array[0][2] != 0:
             return self.board_array[2][0]
+        
+    def check_board_full(self):
+        for i in range(len(self.board_array)):
+            for j in range(len(self.board_array[0])):
+                if self.board_array[i][j] == 0:
+                    return False
+        return True

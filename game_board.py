@@ -81,8 +81,8 @@ def draw_O(screen, corner):
 def draw_buttons(screen):
     GREEN = (0, 155, 0)
     RED = (255, 0, 0)
-    pygame.draw.rect(screen, GREEN, pygame.Rect(400, 50, 60, 35))
-    pygame.draw.rect(screen, RED, pygame.Rect(470, 50, 60, 35))
+    pygame.draw.rect(screen, GREEN, pygame.Rect(450, 50, 60, 35))
+    pygame.draw.rect(screen, RED, pygame.Rect(520, 50, 60, 35))
 
 def game_loop(screen):
     WHITE = (255, 255, 255)
@@ -134,6 +134,10 @@ def game_loop(screen):
             message = font.render(f"{board.check_for_win()} is the winner! Play again?", True, BLACK)
             screen.blit(message, (50, 50))
             game_finished = True
+            draw_buttons(screen)
+        if board.check_board_full():
+            message = font.render(f"Tie! Play again?", True, BLACK)
+            screen.blit(message, (150, 50))
             draw_buttons(screen)
         pygame.display.flip()
     pygame.quit()
