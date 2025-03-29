@@ -78,24 +78,36 @@ def draw_O(screen, corner):
     center = (x+100, y+100)
     pygame.draw.circle(screen, BLUE, center, 75, 5)
 
+def draw_buttons(screen):
+    GREEN = (0, 155, 0)
+    RED = (255, 0, 0)
+    pygame.draw.rect(screen, GREEN, pygame.Rect(400, 50, 60, 35))
+    pygame.draw.rect(screen, RED, pygame.Rect(470, 50, 60, 35))
+
 def game_loop(screen):
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     running = True
     mouse_is_down = False
     x_turn = True
+    game_finished = False
     board = Board()
+    font = pygame.font.Font(None, 40)
     while (running):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN and not mouse_is_down:
                 mouseX, mouseY = pygame.mouse.get_pos()
+                if game_finished:
+                    #TODO handle buttons
+                    print("Help")
                 top_left_corner = get_sector(mouseX, mouseY)
                 if top_left_corner == 0:
                     continue
+                placed_success = False
                 row, col = translate_to_row_col(top_left_corner)
-                if x_turn:
+                if x_turn and not game_finished:
                     placed_success = board.place_x(row, col)
-                else:
+                elif not x_turn and not game_finished:
                     placed_success = board.place_o(row, col)
                 mouse_is_down = True
                 if placed_success:
@@ -118,9 +130,11 @@ def game_loop(screen):
                     draw_X(screen, translate_to_corner(i, j))
                 if board.board_array[i][j] == "o":
                     draw_O(screen, translate_to_corner(i, j))
-        if board.check_for_win() == "x" or board.check_for_win() == "o":
-            print(f"winner is {board.check_for_win()}")
-            running = False
+        if board.check_for_win() != None:
+            message = font.render(f"{board.check_for_win()} is the winner! Play again?", True, BLACK)
+            screen.blit(message, (50, 50))
+            game_finished = True
+            draw_buttons(screen)
         pygame.display.flip()
     pygame.quit()
 
